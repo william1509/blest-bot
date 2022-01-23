@@ -42,21 +42,26 @@ async def on_ready():
         model = text_model.compile()
         print('Model compiled')
     
-    # with open("train.txt", 'w', encoding='utf_8') as f:       
-    #     channels_id = [
-    #         385640449244659713,
-    #         442911962645659648,
-    #         773034002454020116
-    #     ]
-    #     for id in channels_id:
-    #         c_channel = client.get_channel(id)
-    #         messages = await c_channel.history(limit=4000).flatten()
-    #         for i in range(len(messages)):
-    #             line = sanatize(messages[i].content)
-    #             if 'http' in line or len(line) == 0 or 'blest' in line or messages[i].author == client.user:
-    #                 continue
-    #             f.write(line + '\n')
-    #     print('Messages written')
+    with open("train.txt", 'w', encoding='utf_8') as f:       
+        channels_id = [
+            385640449244659713,
+            442911962645659648,
+            773034002454020116
+        ]
+
+        for id in channels_id:
+            c_channel = client.get_channel(id)
+            messages = await c_channel.history(limit=4000).flatten()
+            for i in range(len(messages)):
+                line = sanatize(messages[i].content)
+                if len(line) == 0 or \
+                'http' in line or \
+                'blest' in line or \
+                '@everyone' in line or \
+                messages[i].author == client.user:
+                    continue
+                f.write(line + '\n')
+        print('Messages written')
 
 @client.event
 async def on_message(message):
