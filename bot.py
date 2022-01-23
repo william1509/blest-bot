@@ -50,7 +50,7 @@ async def on_ready():
     #     ]
     #     for id in channels_id:
     #         c_channel = client.get_channel(id)
-    #         messages = await c_channel.history(limit=2000).flatten()
+    #         messages = await c_channel.history(limit=4000).flatten()
     #         for i in range(len(messages)):
     #             line = sanatize(messages[i].content)
     #             if 'http' in line or len(line) == 0 or 'blest' in line or messages[i].author == client.user:
@@ -60,7 +60,6 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-
     mess = message.content.lower()
 
     if message.author == client.user:
