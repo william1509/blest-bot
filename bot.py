@@ -1,67 +1,43 @@
 # bot.py
 import os
+from sys import argv
 
 import discord
 from dotenv import load_dotenv
-
 import markovify
 import random
-
-import re
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
 client = discord.Client()
 
-def sanatize(test_str):
-    ret = ''
-    skip1c = 0
-    for i in test_str:
-        if i == '<':
-            skip1c += 1
-        elif i == '>' and skip1c > 0:
-            skip1c -= 1
-        elif skip1c == 0:
-            ret += i
-    return ret.lower()
-
 @client.event
 async def on_ready():
     print(f'{client.user.name} has connected to Discord!')
 
-    # Get raw text as string.
-    with open("train.txt", 'r', encoding='utf_8') as f:
-        text = f.readlines()
-        random.shuffle(text)
-        text = ''.join(text)
+    models = []
+    models_weights = []
 
-        # Build the model.
-        text_model = markovify.NewlineText(text, state_size=2)
-        global model
-        model = text_model.compile()
-        print('Model compiled')
+    directory = os.listdir(".")
+    for file in directory:
+        if 'train' in file and file.endswith(".txt"):
     
-    # with open("train.txt", 'w', encoding='utf_8') as f:       
-    #     channels_id = [
-    #         385640449244659713,
-    #         442911962645659648,
-    #         773034002454020116
-    #     ]
+            with open(file, 'r', encoding='utf_8') as f:
+                text = f.readlines()
+                random.shuffle(text)
+                text = ''.join(text)
 
-    #     for id in channels_id:
-    #         c_channel = client.get_channel(id)
-    #         messages = await c_channel.history(limit=4000).flatten()
-    #         for i in range(len(messages)):
-    #             line = sanatize(messages[i].content)
-    #             if len(line) == 0 or \
-    #             'http' in line or \
-    #             'blest' in line or \
-    #             '@everyone' in line or \
-    #             messages[i].author == client.user:
-    #                 continue
-    #             f.write(line + '\n')
-    #     print('Messages written')
+                # Build the model.
+                models.append(markovify.NewlineText(text, state_size=2))
+                models_weights.append(1)
+    
+    model_combo = markovify.combine(models, models_weights)
+
+    global text_model
+    text_model = model_combo.compile()
+                
+    print('Model compiled')
 
 @client.event
 async def on_message(message):
@@ -75,10 +51,12 @@ async def on_message(message):
         print("No blest")
         return
 
-    response = model.make_sentence()
+    response = text_model.make_short_sentence(200)
     while response is None:
-        response = model.make_sentence()
+        response = text_model.make_short_sentence(200)
         print("No response")
     await message.channel.send(response + " kappo")
 
-client.run(TOKEN)
+
+if __name__ == '__main__':
+    client.run(TOKEN)
