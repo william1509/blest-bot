@@ -1,0 +1,4 @@
+markovify==0.9.3
+discord==1.7.3
+facebook-scraper==0.2.49
+python-dotenv==0.19.2
