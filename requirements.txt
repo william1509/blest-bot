@@ -1,0 +1,5 @@
+markovify
+discord
+random
+facebook-scraper==0.2.49
+python-dotenv

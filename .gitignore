@@ -1,1 +1,3 @@
 **/*.env
+train_*.txt
+test.py
