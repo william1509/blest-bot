@@ -14,6 +14,8 @@ You need to create a file named `.env` and place the following inside
 # .env
 DISCORD_TOKEN={YOUR_DISCORD_TOKEN_HERE}
 DISCORD_GUILDS={TEXT_CHANNEL_IDS}
+TRIGGER_WORD={TRIGGER_WORD}
+SUFFIX_WORD={SUFFIX_WORD}
 ```
 
 Example:
@@ -22,6 +24,8 @@ Example:
 # .env
 DISCORD_TOKEN=488494944994
 DISCORD_GUILDS=437289473289,43829042389,4738294279
+TRIGGER_WORD=blest
+SUFFIX_WORD=kappo
 ```
 Watch out ! The text channel ids must be separated by a comma `,`
 
