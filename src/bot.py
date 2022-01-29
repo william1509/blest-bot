@@ -1,6 +1,5 @@
 # bot.py
 import os
-from sys import argv
 
 import discord
 from dotenv import load_dotenv
@@ -8,7 +7,20 @@ import markovify
 import random
 
 load_dotenv()
+
 TOKEN = os.getenv('DISCORD_TOKEN')
+if TOKEN is None:
+    print("Token not found")
+    exit(1)
+
+TRIGGER_WORD = str(os.getenv('TRIGGER_WORD'))
+if TRIGGER_WORD is None:
+    TRIGGER_WORD = 'blest'
+
+SUFFIX_WORD = str(os.getenv('SUFFIX_WORD'))
+if SUFFIX_WORD is None:
+    SUFFIX_WORD = ''
+
 
 client = discord.Client()
 
@@ -51,11 +63,11 @@ async def on_message(message):
     mess = message.content.lower()
 
     if message.author == client.user:
-        print("Wrong user")
+        print("Bot message")
         return 
 
-    if 'blest' not in mess:
-        print("No blest")
+    if TRIGGER_WORD not in mess:
+        print("No trigger word")
         return
     
     if text_model is None:
@@ -65,7 +77,7 @@ async def on_message(message):
     response = text_model.make_short_sentence(70)
     while response is None:
         response = text_model.make_short_sentence(70)
-    await message.channel.send(response + " kappo")
+    await message.channel.send(response + SUFFIX_WORD)
 
 
 if __name__ == '__main__':
