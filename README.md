@@ -25,7 +25,7 @@ Example:
 DISCORD_TOKEN=488494944994
 DISCORD_GUILDS=437289473289,43829042389,4738294279
 TRIGGER_WORD=blest
-SUFFIX_WORD={kappo}
+SUFFIX_WORD=kappo
 ```
 Watch out ! The text channel ids must be separated by a comma `,`
 
