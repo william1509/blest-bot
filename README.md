@@ -37,6 +37,13 @@ To start the script simply execute the following line
 
 `python3 training_set_generator.py`
 
+If you want to make your own training file, simply create a file named `train_X.txt` where X is any integer. Make sure each sentences are separeted by a new line, like the following :
+
+```
+This is a sentence
+This is another sentence
+```
+
 ## Start the bot
 
 You can either start the bot in your terminal with
