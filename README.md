@@ -54,6 +54,8 @@ or as a background process with
 
 `python3 bot.py > logs.txt &`
 
+Using docker, you can simply run `docker compose run blest-bot-training` to run the training program and `docker compose run blest-bot-svc` to run the actual bot
+
 ## Stop the bot
 
 To stop the bot, you can simply kill the process with `Ctrl + C` if it runs inside a terminal or you can find its PID with `pgrep -lf python3` if it's running in the background.

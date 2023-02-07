@@ -8,7 +8,10 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 CHANNELS = os.getenv('DISCORD_GUILDS')
 
-client = discord.Client()
+intents = discord.Intents.default()
+intents.message_content = True
+
+client = discord.Client(intents=intents)
 
 def sanatize(test_str):
     ret = ''
@@ -22,37 +25,13 @@ def sanatize(test_str):
             ret += i
     return ret.lower()
 
-def train_facebook():
-
-    with open("train_1.txt", 'w', encoding='utf_8') as f:
-        """ Get facebook messages """
-        options = {
-            "posts_per_page": 20,
-            "allow_extra_requests": False
-        }
-
-        for post in get_posts('javoueque', pages=50, options=options):
-            text: str = post['text'].lower()
-
-            text = text.replace("j’avoue que", '')
-            text = text.replace("j'avoue que", '')
-            text = text.replace("javoue que", '')
-            text = text.strip()
-
-            if len(text) == 0:
-                continue
-            f.write(text + '\n')
-
-        f.close()
-    print('Facebook messages written')
-
 async def train_discord():
-    with open("train_2.txt", 'a', encoding='utf_8') as f:
-        
+    with open("training/train.txt", 'w', encoding='utf_8') as f:
         """ Get discord messages"""
         for id in CHANNELS.split(','):
             c_channel = client.get_channel(int(id))
-            messages = await c_channel.history(limit=4000).flatten()
+            history = c_channel.history(limit=4000)
+            messages = [i async for i in history]
             for i in range(len(messages)):
                 line = sanatize(messages[i].content)
                 if len(line) == 0 or \
@@ -85,7 +64,9 @@ if __name__ == '__main__':
             os.remove(file)
 
     # Add the messages from facebook
-    #train_facebook()
+    if TOKEN is None or TOKEN == "":
+        print("The token is empty")
+        exit(0)
 
     # Add the messages from discord
     client.run(TOKEN)

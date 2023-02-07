@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  training:
+    build:
+      dockerfile: Dockerfile.training
+    volumes:
+      - "./training:/code/training"
+  svc:
+    build:
+      dockerfile: Dockerfile.bot

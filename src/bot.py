@@ -21,8 +21,9 @@ SUFFIX_WORD = str(os.getenv('SUFFIX_WORD'))
 if SUFFIX_WORD is None:
     SUFFIX_WORD = ''
 
-
-client = discord.Client()
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(intents=intents)
 
 @client.event
 async def on_ready():
@@ -31,7 +32,7 @@ async def on_ready():
     models = []
     models_weights = []
 
-    directory = os.listdir(".")
+    directory = os.listdir("training/")
 
     directory = [ a for a in directory if 'train' in a and a.endswith('.txt')]
 
@@ -42,7 +43,7 @@ async def on_ready():
     for file in directory:
         if 'train' in file and file.endswith(".txt"):
     
-            with open(file, 'r', encoding='utf_8') as f:
+            with open(f"training/{file}", 'r', encoding='utf_8') as f:
                 text = f.readlines()
                 random.shuffle(text)
                 text = ''.join(text)
@@ -77,7 +78,7 @@ async def on_message(message):
     response = text_model.make_short_sentence(70)
     while response is None:
         response = text_model.make_short_sentence(70)
-    await message.channel.send(response + SUFFIX_WORD)
+    await message.channel.send(f"{response} {SUFFIX_WORD}")
 
 
 if __name__ == '__main__':

@@ -2,3 +2,5 @@
 train_*.txt
 test.py
 log.txt
+training/
+venv
