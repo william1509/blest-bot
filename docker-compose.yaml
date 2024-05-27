@@ -6,5 +6,6 @@ services:
     volumes:
       - "./training:/code/training"
   svc:
+    restart: unless-stopped
     build:
       dockerfile: Dockerfile.bot
